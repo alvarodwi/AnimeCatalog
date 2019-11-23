@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/animeList">
+
+    <fragment
+        android:id="@+id/animeList"
+        android:name="com.pedo.animecatalog.ui.animelist.AnimeListFragment"
+        android:label="AnimeListFragment" >
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/animeDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/animeDetail"
+        android:name="com.pedo.animecatalog.ui.animedetail.AnimeDetailFragment"
+        android:label="AnimeDetailFragment" >
+        <argument
+            android:name="selectedMovie"
+            app:argType="com.pedo.animecatalog.domain.Anime" />
+    </fragment>
+</navigation>
