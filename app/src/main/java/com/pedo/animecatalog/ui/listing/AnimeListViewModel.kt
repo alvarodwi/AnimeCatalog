@@ -1,31 +1,28 @@
-package com.pedo.animecatalog.ui.animelist
+package com.pedo.animecatalog.ui.listing
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import com.pedo.animecatalog.database.AnimeDatabase
 import com.pedo.animecatalog.database.getDatabase
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
 import com.pedo.animecatalog.utils.asDomainModels
 import kotlinx.coroutines.*
-import org.w3c.dom.DOMConfiguration
 import timber.log.Timber
 
 enum class JikanApiStatus{
     LOADING,DONE,ERROR
 }
 
-class AnimeListViewModel(app : Application) : AndroidViewModel(app) {
+class AnimeListViewModel(animeType : String,app : Application) : AndroidViewModel(app) {
     //coroutine
     private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     //livedata
-    //movies
-    private val _movies = MutableLiveData<List<Anime>>()
-    val movies : LiveData<List<Anime>>
-        get() = _movies
+    //animes
+    private val _animes = MutableLiveData<List<Anime>>()
+    val animes : LiveData<List<Anime>>
+        get() = _animes
     //selected movie todetail
     private val _navigateToDetail = MutableLiveData<Anime>()
     val navigateToDetail : LiveData<Anime>
@@ -38,22 +35,23 @@ class AnimeListViewModel(app : Application) : AndroidViewModel(app) {
     private val repository : AnimeRepository = AnimeRepository(getDatabase(app))
 
     init{
-        getAnimes(1,"tv")
+        getAnimes(1,animeType)
     }
 
     //getAllMovieFromJikanApi
-    fun getAnimes(page : Int,type : String){
-        uiScope.launch {
+    private fun getAnimes(page : Int,type : String){
+        viewModelScope.launch {
             Timber.d("Top Anime GET")
             try{
                 _status.value = JikanApiStatus.LOADING
                 val getMovies = repository.getTopAnime(page,type)
-                _movies.value = getMovies.asDomainModels()
+                _animes.value = getMovies.asDomainModels()
                 _status.value = JikanApiStatus.DONE
             }catch (e: Exception){
+                Timber.e(e)
                 Timber.d("API FAIL")
                 _status.value = JikanApiStatus.ERROR
-                _movies.value = ArrayList()
+                _animes.value = ArrayList()
             }
         }
     }
@@ -64,7 +62,7 @@ class AnimeListViewModel(app : Application) : AndroidViewModel(app) {
     }
 
     fun displayMovieDetail(movie: Anime){
-        Timber.d("Anime : ${movie.toString()}")
+        Timber.d("Anime : ${movie.title}, url = ${movie.url}")
         _navigateToDetail.value = movie
     }
 
@@ -72,11 +70,11 @@ class AnimeListViewModel(app : Application) : AndroidViewModel(app) {
         _navigateToDetail.value = null
     }
 
-    class Factory(val app: Application) : ViewModelProvider.Factory{
+    class Factory(val type : String,val app: Application) : ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             if(modelClass.isAssignableFrom(AnimeListViewModel::class.java)){
-                return AnimeListViewModel(app) as T
+                return AnimeListViewModel(type,app) as T
             }
             throw IllegalArgumentException("Unable To Construct ViewModel")
         }

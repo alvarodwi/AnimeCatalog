@@ -9,7 +9,7 @@ buildscript {
         retrofit_version = "2.6.2"
         moshi_version = "1.9.1"
         glide_version = "4.10.0"
-        room_version = "2.2.1"
+        room_version = "2.2.2"
     }
     repositories {
         google()

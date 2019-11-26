@@ -1,4 +1,4 @@
-package com.pedo.animecatalog.ui.animelist
+package com.pedo.animecatalog.ui.listing.series
 
 
 import android.os.Bundle
@@ -11,17 +11,19 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
-import com.pedo.animecatalog.databinding.FragmentAnimeListBinding
-import com.pedo.animecatalog.ui.adapter.AnimeListAdapter
+import com.pedo.animecatalog.databinding.FragmentAnimeSeriesBinding
+import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
+import com.pedo.animecatalog.ui.listing.AnimeListFragmentDirections
+import com.pedo.animecatalog.ui.listing.AnimeListViewModel
 
 /**
  * A simple [Fragment] subclass.
  */
-class AnimeListFragment : Fragment() {
+class AnimeSeriesFragment : Fragment() {
     private val viewModel: AnimeListViewModel by lazy {
         ViewModelProviders.of(
             this,
-            AnimeListViewModel.Factory(activity!!.application)
+            AnimeListViewModel.Factory("tv",activity!!.application)
         ).get(AnimeListViewModel::class.java)
     }
 
@@ -29,14 +31,13 @@ class AnimeListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // create binding
         val activity = requireNotNull(activity)
-        val binding = FragmentAnimeListBinding.inflate(inflater)
+        val binding = FragmentAnimeSeriesBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.animeRv.layoutManager = LinearLayoutManager(activity.applicationContext)
-        binding.animeRv.adapter =
+        binding.animeSeriesRv.layoutManager = LinearLayoutManager(activity.applicationContext)
+        binding.animeSeriesRv.adapter =
             AnimeListAdapter(
                 AnimeListAdapter.OnClickListener {
                     viewModel.displayMovieDetail(it)

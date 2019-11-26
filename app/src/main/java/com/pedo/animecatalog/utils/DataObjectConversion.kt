@@ -5,8 +5,49 @@ import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.network.JikanTopResponse
 import com.pedo.animecatalog.network.NetworkAnime
 
-//database model as domain
+//domain as database model
+fun Anime.asDatabaseModel() : AnimeModel{
+    val titleSynonymsString = convertListStringToString(titleSynonyms)
+    val studiosString = convertListStringToString(studios)
+    val genresString = convertListStringToString(genres)
+    val openingThemesString = convertListStringToString(openingThemes)
+    val endingThemesString = convertListStringToString(endingThemes)
 
+    return AnimeModel(
+        id = id,
+        url = url,
+        imageUrl = imageUrl,
+        trailerUrl = trailerUrl,
+        title = title,
+        titleEnglish = titleEnglish,
+        titleJapanese = titleJapanese,
+        titleSynonyms = titleSynonymsString,
+        type = type,
+        source = source,
+        episodes = episodes,
+        status = status,
+        airing = airing,
+        aired = aired,
+        duration = duration,
+        rating = rating,
+        score = score,
+        scoredBy = scoredBy,
+        rank = rank,
+        popularity = popularity,
+        members = members,
+        favorites = favorites,
+        synopsis = synopsis,
+        background = background,
+        premiered = premiered,
+        broadcast = broadcast,
+        studios = studiosString,
+        genres = genresString,
+        openingThemes = openingThemesString,
+        endingThemes = endingThemesString
+    )
+}
+
+//database model as domain
 fun AnimeModel.asDomainModel() : Anime{
     val titleSynonymsList = convertStringToListString(titleSynonyms)
     val studiosList = convertStringToListString(studios)
@@ -65,7 +106,7 @@ fun NetworkAnime.asDomainModel() : Anime{
         titleSynonyms = titleSynonyms,
         type = type,
         source = source,
-        episodes = episodes,
+        episodes = episodes ?: 0,
         status = status,
         airing = airing,
         aired = airedString,
@@ -108,7 +149,7 @@ fun NetworkAnime.asDatabaseModel() : AnimeModel{
         titleSynonyms = titleSynonymsList,
         type = type,
         source = source,
-        episodes = episodes,
+        episodes = episodes ?: 0,
         status = status,
         airing = airing,
         aired = airedString,
@@ -145,7 +186,7 @@ fun JikanTopResponse.asDomainModels() : List<Anime>{
             titleSynonyms = it.titleSynonyms,
             type = it.type,
             source = it.source,
-            episodes = it.episodes,
+            episodes = it.episodes ?: 0,
             status = it.status,
             airing = it.airing,
             aired = it.aired?.string,

@@ -9,7 +9,7 @@ data class NetworkAnime(
     val url : String,
     @Json(name = "image_url") val imageUrl : String,
     val type : String,
-    val episodes : Int,
+    val episodes : Int?,
     val members : Int,
     val score : Double,
     @Json(name = "trailer_url") val trailerUrl : String?,

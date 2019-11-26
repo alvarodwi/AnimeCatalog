@@ -4,42 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="onClickListener"
-            type="com.pedo.animecatalog.ui.adapter.AnimeListAdapter.OnClickListener" />
+            type="com.pedo.animecatalog.utils.adapter.AnimeListAdapter.OnClickListener" />
+
         <variable
-            name="movie"
-            type="com.pedo.animecatalog.domain.Anime"/>
+            name="anime"
+            type="com.pedo.animecatalog.domain.Anime" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClickListener.onClick(movie)}"
-        >
+        android:layout_marginTop="@dimen/default_dimen"
+        android:layout_marginBottom="@dimen/default_dimen"
+        android:onClick="@{() -> onClickListener.onClick(anime)}">
 
-        <ImageView
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/img_cover"
-            android:layout_width="120dp"
-            android:layout_height="200dp"
-            android:adjustViewBounds="true"
-            android:padding="2dp"
-            android:scaleType="centerCrop"
-            app:imageUrl="@{movie.imageUrl}"
-            tools:src="@tools:sample/backgrounds/scenic"/>
-        <TextView
-            android:id="@+id/tv_title"
+        <RelativeLayout
+            android:id="@+id/img_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="TITLE"
-            app:layout_constraintLeft_toRightOf="@id/img_cover"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/default_dimen"
-            android:layout_marginStart="@dimen/default_dimen"
-            android:text="@{movie.title}"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_cover"
+                android:layout_width="57dp"
+                android:layout_height="85dp"
+                android:layout_margin="5dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/cover_image"
+                app:coverImg="@{anime.imageUrl}"
+                tools:src="@tools:sample/backgrounds/scenic" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/card_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/img_container"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="#Rank"
+                    showRank="@{anime.rank}"
+                    android:layout_alignParentEnd="true"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/default_dimen"
+                    android:layout_marginTop="@dimen/default_dimen"
+                    android:layout_marginEnd="@dimen/default_dimen"
+                    android:text="@{anime.title}"
+                    android:textStyle="bold"
+                    tools:text="TITLE" />
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    showScore="@{anime.score}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_title"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="false"
+                    android:layout_marginStart="@dimen/default_dimen"
+                    tools:text="SCORE" />
+            </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

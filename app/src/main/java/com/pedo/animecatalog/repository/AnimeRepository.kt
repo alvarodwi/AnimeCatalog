@@ -1,6 +1,8 @@
 package com.pedo.animecatalog.repository
 
+import androidx.lifecycle.LiveData
 import com.pedo.animecatalog.database.AnimeDatabase
+import com.pedo.animecatalog.database.AnimeModel
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.network.NetworkAnime
 import com.pedo.animecatalog.utils.asDatabaseModel
@@ -9,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class AnimeRepository(private val database : AnimeDatabase) {
     //retrofit client/service
@@ -16,9 +19,9 @@ class AnimeRepository(private val database : AnimeDatabase) {
 
     suspend fun getTopAnime(page : Int,type : String) = jikanClient.getAll(page,type)
 
-    suspend fun getAnime(id : Long) = jikanClient.getAnime(id)
+    suspend fun getAnime(id : Int) = jikanClient.getAnime(id)
 
-    suspend fun saveAnimeAsLoved(anime : NetworkAnime){
+    suspend fun markAsFavorite(anime : Anime){
         withContext(Dispatchers.IO){
             val animeSaved = anime.asDatabaseModel()
             animeSaved.isLoved = true
@@ -26,9 +29,7 @@ class AnimeRepository(private val database : AnimeDatabase) {
         }
     }
 
-    suspend fun saveSelectedAnime(){
-        withContext(Dispatchers.IO){
+    suspend fun findAnime(id : Int) = database.animeDao.getAnime(id)
 
-        }
-    }
+    fun showAllAnimes() = database.animeDao.getAnimes()
 }

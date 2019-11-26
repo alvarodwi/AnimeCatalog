@@ -11,7 +11,7 @@ data class Anime(
     val imageUrl : String,
     val title : String,
     val type : String,
-    val episodes : Int,
+    val episodes : Int = 0,
     val members : Int,
     val score : Double,
     val trailerUrl : String? = null,
