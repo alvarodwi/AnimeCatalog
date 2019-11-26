@@ -17,25 +17,25 @@ data class NetworkStudio(
 )
 
 data class NetworkAired (
-    val from : String,
-    val to : String,
+    val from : String?,
+    val to : String? = "?",
     val prop : NetworkProp,
     val string : String
 )
 
 data class NetworkProp (
-    val from : NetworkFrom,
-    val to : NetworkTo
+    val from : NetworkFrom?,
+    val to : NetworkTo?
 )
 
 data class NetworkFrom (
-    val day : String,
-    val month : String,
-    val year : String
+    val day : String?,
+    val month : String?,
+    val year : String?
 )
 
 data class NetworkTo (
-    val day : String,
-    val month : String,
-    val year : String
+    val day : String?,
+    val month : String?,
+    val year : String?
 )

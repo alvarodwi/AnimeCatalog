@@ -1,4 +1,4 @@
-package com.pedo.animecatalog.ui.animedetail
+package com.pedo.animecatalog.ui.detail
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

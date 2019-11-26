@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface AnimeDao{
     @Query("SELECT * FROM anime WHERE id = :id")
-    fun getAnime(id : Int) : LiveData<AnimeModel>
+    suspend fun getAnime(id : Int) : AnimeModel
 
     @Query("SELECT * FROM anime")
     fun getAnimes() : LiveData<List<AnimeModel>>

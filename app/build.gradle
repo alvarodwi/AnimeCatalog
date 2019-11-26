@@ -23,6 +23,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            resValue("string", "PORT_NUMBER", "4096")
+        }
     }
 }
 
@@ -52,6 +55,10 @@ dependencies {
     // room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
     //timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }

@@ -1,4 +1,4 @@
-package com.pedo.animecatalog.ui.adapter
+package com.pedo.animecatalog.utils.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -37,14 +37,14 @@ class AnimeListAdapter(private val onClickListener: OnClickListener) : ListAdapt
     }
 
     class AnimeViewHolder(private val binding : AnimeItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(movie : Anime,itemClick : OnClickListener){
-            binding.movie = movie
+        fun bind(anime : Anime,itemClick : OnClickListener){
+            binding.anime = anime
             binding.onClickListener = itemClick
             binding.executePendingBindings()
         }
     }
 
-    class OnClickListener(val clickListener: (movie: Anime) -> Unit){
-        fun onClick(movie: Anime) = clickListener(movie)
+    class OnClickListener(val clickListener: (anime: Anime) -> Unit){
+        fun onClick(anime: Anime) = clickListener(anime)
     }
 }

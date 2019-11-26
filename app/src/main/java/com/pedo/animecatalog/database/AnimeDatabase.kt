@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import timber.log.Timber
 
 @Database(entities = [AnimeModel::class],version = 1,exportSchema = false)
 abstract class AnimeDatabase : RoomDatabase(){
@@ -21,6 +22,7 @@ fun getDatabase(context : Context): AnimeDatabase{
                 "anime-db"
             ).build()
         }
+        Timber.d(INSTANCE.toString())
         return INSTANCE
     }
 }

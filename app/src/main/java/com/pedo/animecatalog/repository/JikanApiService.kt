@@ -22,10 +22,10 @@ private val retrofit = Retrofit.Builder()
 
 interface JikanApiService{
     @GET("anime/{id}")
-    suspend fun getAnime(@Path("id")id : Long) : NetworkAnime
+    suspend fun getAnime(@Path("id")id : Int) : NetworkAnime
 
-    @GET("top/anime/{page}/{type}")
-    suspend fun getAll(@Path("page")page : Int,@Path("type")type :String) : JikanTopResponse
+    @GET("top/anime/{page}/{subType}")
+    suspend fun getAll(@Path("page")page : Int,@Path("subType")subType :String) : JikanTopResponse
 }
 
 object JikanApi{

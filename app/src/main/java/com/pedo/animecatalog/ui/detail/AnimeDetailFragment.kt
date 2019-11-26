@@ -1,4 +1,4 @@
-package com.pedo.animecatalog.ui.animedetail
+package com.pedo.animecatalog.ui.detail
 
 
 import android.os.Bundle
@@ -8,12 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 
-import com.pedo.animecatalog.R
 import com.pedo.animecatalog.databinding.FragmentAnimeDetailBinding
 
-/**
- * A simple [Fragment] subclass.
- */
 class AnimeDetailFragment : Fragment() {
 
     override fun onCreateView(

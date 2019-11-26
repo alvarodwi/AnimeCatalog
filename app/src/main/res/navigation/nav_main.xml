@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listing">
+
+    <fragment
+        android:id="@+id/listing"
+        android:name="com.pedo.animecatalog.ui.listing.AnimeListFragment"
+        android:label="AnimeListFragment">
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/detail_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/favorites"
+        android:name="com.pedo.animecatalog.ui.favorite.AnimeFavoriteFragment"
+        android:label="fragment_anime_favorite"
+        tools:layout="@layout/fragment_anime_favorite">
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/detail_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/latest"
+        android:name="com.pedo.animecatalog.ui.latest.AnimeLatestFragment"
+        android:label="fragment_anime_latest"
+        tools:layout="@layout/fragment_anime_latest">
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/detail_activity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/detail_activity"
+        android:name="com.pedo.animecatalog.PopupActivity"
+        android:label="Anime Detail"
+        tools:layout="@layout/activity_popup">
+        <argument
+            android:name="selectedMovie"
+            app:argType="com.pedo.animecatalog.domain.Anime" />
+    </activity>
+</navigation>

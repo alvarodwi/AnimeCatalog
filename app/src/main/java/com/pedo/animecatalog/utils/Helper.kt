@@ -59,3 +59,13 @@ fun convertGenresToString(genres : List<NetworkGenre>?) : String{
     }
     return stringList
 }
+
+fun Double.format(digits : Int) = String.format("%.${digits}f",this)
+
+fun formatAired(start : String,end : String?) : String{
+    if(end.isNullOrEmpty()){
+        return start
+    }else{
+        return "$start - $end"
+    }
+}
