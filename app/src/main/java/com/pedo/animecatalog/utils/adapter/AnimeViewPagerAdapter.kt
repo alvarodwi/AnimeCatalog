@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.pedo.animecatalog.R
-import com.pedo.animecatalog.ui.listing.movies.AnimeMoviesFragment
-import com.pedo.animecatalog.ui.listing.series.AnimeSeriesFragment
+import com.pedo.animecatalog.ui.list.types.movies.AnimeMoviesFragment
+import com.pedo.animecatalog.ui.list.types.series.AnimeSeriesFragment
 
 class AnimeViewPagerAdapter(private val context : Context, fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager,
     BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){

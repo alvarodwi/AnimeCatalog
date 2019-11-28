@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.pedo.animecatalog.ui.list.AnimeListViewModel" />
@@ -13,38 +12,32 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srl_series"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
+            android:id="@+id/srl_airing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/anime_series_rv"
+                android:id="@+id/anime_airing_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
                 android:padding="6dp"
+                android:clipToPadding="false"
                 app:listData="@{viewModel.animes}"
                 app:spanCount="2"
-                tools:itemCount="16"
                 tools:listitem="@layout/anime_item" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
         <ImageView
-            android:id="@+id/status_series_image"
+            android:id="@+id/status_airing_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:jikanApiStatus="@{viewModel.status}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
-
+            app:jikanApiStatus="@{viewModel.status}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

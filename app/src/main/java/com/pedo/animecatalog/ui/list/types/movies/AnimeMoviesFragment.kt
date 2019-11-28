@@ -1,29 +1,29 @@
-package com.pedo.animecatalog.ui.latest
+package com.pedo.animecatalog.ui.list.types.movies
 
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-
-import com.pedo.animecatalog.R
 import com.pedo.animecatalog.databinding.FragmentAnimeMoviesBinding
-import com.pedo.animecatalog.ui.listing.AnimeListFragmentDirections
-import com.pedo.animecatalog.ui.listing.AnimeListViewModel
+import com.pedo.animecatalog.ui.list.AnimeListViewModel
+import com.pedo.animecatalog.ui.list.types.AnimeTypesFragmentDirections
+import com.pedo.animecatalog.utils.AnimeListingStatus
 import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
-import timber.log.Timber
 
-class AnimeLatestFragment : Fragment() {
+/**
+ * A simple [Fragment] subclass.
+ */
+class AnimeMoviesFragment : Fragment() {
     private val viewModel: AnimeListViewModel by lazy {
         ViewModelProviders.of(
             this,
-            AnimeListViewModel.Factory("airing",activity!!.application)
+            AnimeListViewModel.Factory("movie",activity!!.application)
         ).get(AnimeListViewModel::class.java)
     }
 
@@ -46,13 +46,25 @@ class AnimeLatestFragment : Fragment() {
         viewModel.navigateToDetail.observe(this, Observer { anime ->
             anime?.let {
                 this.findNavController().navigate(
-                    AnimeListFragmentDirections.showDetail(it)
+                    AnimeTypesFragmentDirections.showDetail(it)
                 )
                 viewModel.displayMovieDetailCompleted()
             }
         })
 
+        binding.srlMovies.setOnRefreshListener {
+            viewModel.onRefresh()
+        }
+
+        viewModel.status.observe(this, Observer {
+            it?.let{ status ->
+                when(status){
+                    AnimeListingStatus.LOADING -> binding.srlMovies.isRefreshing = true
+                    AnimeListingStatus.DONE, AnimeListingStatus.ERROR -> binding.srlMovies.isRefreshing = false
+                }
+            }
+        })
+
         return binding.root
     }
-
 }

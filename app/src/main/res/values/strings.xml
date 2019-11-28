@@ -3,18 +3,24 @@
 
     <string name="series_text">Series</string>
     <string name="movies_text">Movies</string>
-    <string name="text_listing">Listing</string>
     <string name="text_latest">Latest</string>
     <string name="text_favorites">Favorites</string>
     <string name="text_close">Close</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_score">Score : %s</string>
     <string name="cover_image">Cover Image</string>
-    <string name="text_aired">Aired</string>
     <string name="add_fav">Add To Favorites</string>
     <string name="remove_fav">Remove From Favorites</string>
     <string name="text_rank">#%d</string>
+
+    <string name="text_top">Top</string>
+    <string name="text_about_me">About Me</string>
+    <string name="text_list">List</string>
+    <string name="text_grid">Grid</string>
+    <string name="text_search">Search</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_no_score">No Score Yet</string>
 
 </resources>

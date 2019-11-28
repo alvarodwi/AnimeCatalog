@@ -2,15 +2,17 @@ package com.pedo.animecatalog.ui.detail
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-
+import com.pedo.animecatalog.R
 import com.pedo.animecatalog.databinding.FragmentAnimeDetailBinding
 
 class AnimeDetailFragment : Fragment() {
+    private lateinit var viewModel : AnimeDetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,7 +24,24 @@ class AnimeDetailFragment : Fragment() {
 
         val movie = AnimeDetailFragmentArgs.fromBundle(arguments!!).selectedMovie
         val viewModelFactory = AnimeDetailViewModelFactory(movie,application)
-        binding.viewModel = ViewModelProviders.of(this,viewModelFactory).get(AnimeDetailViewModel::class.java)
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(AnimeDetailViewModel::class.java)
+        binding.viewModel = viewModel
+
+        viewModel.isFavorited.observe(this, Observer {
+            it?.let{favorited ->
+                if (favorited){
+                    binding.btnAddFavorite.text = getString(R.string.remove_fav)
+                    binding.btnAddFavorite.setOnClickListener {
+                        viewModel.unMarkFavorite()
+                    }
+                }else{
+                    binding.btnAddFavorite.text = getString(R.string.add_fav)
+                    binding.btnAddFavorite.setOnClickListener {
+                        viewModel.markFavorite()
+                    }
+                }
+            }
+        })
 
         return binding.root
     }

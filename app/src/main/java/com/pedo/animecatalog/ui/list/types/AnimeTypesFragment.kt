@@ -1,4 +1,4 @@
-package com.pedo.animecatalog.ui.listing
+package com.pedo.animecatalog.ui.list.types
 
 
 import android.os.Bundle
@@ -7,17 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import com.pedo.animecatalog.databinding.FragmentAnimeListBinding
+import com.pedo.animecatalog.databinding.FragmentAnimeTypesBinding
 import com.pedo.animecatalog.utils.adapter.AnimeViewPagerAdapter
 
-class AnimeListFragment : Fragment() {
+/**
+ * A simple [Fragment] subclass.
+ */
+class AnimeTypesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val activity = requireNotNull(activity)
-        val binding = FragmentAnimeListBinding.inflate(inflater)
+        val binding = FragmentAnimeTypesBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
         val animeViewPager = AnimeViewPagerAdapter(activity.applicationContext,childFragmentManager)
@@ -26,6 +29,5 @@ class AnimeListFragment : Fragment() {
 
         return binding.root
     }
-
 
 }

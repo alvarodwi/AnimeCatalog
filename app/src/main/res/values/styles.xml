@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.AnimeToolbar">
+        <item name="android:textColorPrimary">@color/colorIcons</item>
+        <item name="actionMenuTextColor">@color/colorIcons</item>
+        <item name="android:textColorSecondary">@color/colorIcons</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+    </style>
 </resources>

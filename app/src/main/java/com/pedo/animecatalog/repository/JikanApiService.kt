@@ -24,6 +24,9 @@ interface JikanApiService{
     @GET("anime/{id}")
     suspend fun getAnime(@Path("id")id : Int) : NetworkAnime
 
+    @GET("top/anime")
+    suspend fun getTopAnime() : JikanTopResponse
+
     @GET("top/anime/{page}/{subType}")
     suspend fun getAll(@Path("page")page : Int,@Path("subType")subType :String) : JikanTopResponse
 }

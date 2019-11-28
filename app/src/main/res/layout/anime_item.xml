@@ -12,6 +12,10 @@
         <variable
             name="anime"
             type="com.pedo.animecatalog.domain.Anime" />
+
+        <variable
+            name="viewType"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,50 +42,39 @@
                 android:contentDescription="@string/cover_image"
                 app:coverImg="@{anime.imageUrl}"
                 tools:src="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/tv_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="#Rank"
+                showRank="@{anime.rank}"
+                android:layout_alignParentEnd="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_toRightOf="@id/img_cover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/default_dimen"
+                android:layout_marginTop="@dimen/default_dimen"
+                android:layout_marginEnd="@dimen/default_dimen"
+                android:text="@{anime.title}"
+                android:textStyle="bold"
+                tools:text="TITLE" />
+
+            <TextView
+                android:id="@+id/tv_score"
+                showScore="@{anime.score}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_toRightOf="@id/img_cover"
+                android:layout_alignParentEnd="false"
+                android:layout_marginStart="@dimen/default_dimen"
+                tools:text="SCORE" />
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/card_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/img_container"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tv_rank"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="#Rank"
-                    showRank="@{anime.rank}"
-                    android:layout_alignParentEnd="true"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="@dimen/default_dimen"
-                    android:layout_marginTop="@dimen/default_dimen"
-                    android:layout_marginEnd="@dimen/default_dimen"
-                    android:text="@{anime.title}"
-                    android:textStyle="bold"
-                    tools:text="TITLE" />
-
-                <TextView
-                    android:id="@+id/tv_score"
-                    showScore="@{anime.score}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_title"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="false"
-                    android:layout_marginStart="@dimen/default_dimen"
-                    tools:text="SCORE" />
-            </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

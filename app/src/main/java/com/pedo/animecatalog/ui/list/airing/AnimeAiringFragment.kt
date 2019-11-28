@@ -1,29 +1,25 @@
-package com.pedo.animecatalog.ui.listing.series
+package com.pedo.animecatalog.ui.list.airing
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-
-import com.pedo.animecatalog.databinding.FragmentAnimeSeriesBinding
+import com.pedo.animecatalog.databinding.FragmentAnimeAiringBinding
+import com.pedo.animecatalog.ui.list.AnimeListViewModel
+import com.pedo.animecatalog.utils.AnimeListingStatus.*
 import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
-import com.pedo.animecatalog.ui.listing.AnimeListFragmentDirections
-import com.pedo.animecatalog.ui.listing.AnimeListViewModel
 
-/**
- * A simple [Fragment] subclass.
- */
-class AnimeSeriesFragment : Fragment() {
+class AnimeAiringFragment : Fragment() {
     private val viewModel: AnimeListViewModel by lazy {
         ViewModelProviders.of(
             this,
-            AnimeListViewModel.Factory("tv",activity!!.application)
+            AnimeListViewModel.Factory("airing",activity!!.application)
         ).get(AnimeListViewModel::class.java)
     }
 
@@ -32,12 +28,12 @@ class AnimeSeriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val activity = requireNotNull(activity)
-        val binding = FragmentAnimeSeriesBinding.inflate(inflater)
+        val binding = FragmentAnimeAiringBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.animeSeriesRv.layoutManager = LinearLayoutManager(activity.applicationContext)
-        binding.animeSeriesRv.adapter =
+        binding.animeAiringRv.layoutManager = LinearLayoutManager(activity.applicationContext)
+        binding.animeAiringRv.adapter =
             AnimeListAdapter(
                 AnimeListAdapter.OnClickListener {
                     viewModel.displayMovieDetail(it)
@@ -46,14 +42,26 @@ class AnimeSeriesFragment : Fragment() {
         viewModel.navigateToDetail.observe(this, Observer { anime ->
             anime?.let {
                 this.findNavController().navigate(
-                    AnimeListFragmentDirections.showDetail(it)
+                    AnimeAiringFragmentDirections.showDetail(it)
                 )
                 viewModel.displayMovieDetailCompleted()
             }
         })
 
+        binding.srlAiring.setOnRefreshListener {
+            viewModel.onRefresh()
+        }
+
+        viewModel.status.observe(this, Observer {
+            it?.let{ status ->
+                when(status){
+                    LOADING -> binding.srlAiring.isRefreshing = true
+                    DONE,ERROR -> binding.srlAiring.isRefreshing = false
+                }
+            }
+        })
+
         return binding.root
     }
-
 
 }

@@ -2,40 +2,95 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/listing">
-
+    app:startDestination="@id/top">
     <fragment
-        android:id="@+id/listing"
-        android:name="com.pedo.animecatalog.ui.listing.AnimeListFragment"
-        android:label="AnimeListFragment">
+        android:id="@+id/top"
+        android:name="com.pedo.animecatalog.ui.top.AnimeTopFragment"
+        android:label="AnimeTopFragment">
         <action
             android:id="@+id/showDetail"
             app:destination="@id/detail_activity" />
     </fragment>
     <fragment
+        android:id="@+id/lists"
+        android:name="com.pedo.animecatalog.ui.list.AnimeListFragment"
+        android:label="AnimeListFragment">
+        <action
+            android:id="@+id/moveToTypes"
+            app:destination="@id/types" />
+        <action
+            android:id="@+id/moveToSeason"
+            app:destination="@id/season" />
+        <action
+            android:id="@+id/moveToAiring"
+            app:destination="@id/airing" />
+        <action
+            android:id="@+id/moveToUpcoming"
+            app:destination="@id/upcoming" />
+    </fragment>
+    <fragment
+        android:id="@+id/search"
+        android:name="com.pedo.animecatalog.ui.search.AnimeSearchFragment"
+        android:label="AnimeSearchFragment">
+
+    </fragment>
+    <fragment
         android:id="@+id/favorites"
         android:name="com.pedo.animecatalog.ui.favorite.AnimeFavoriteFragment"
-        android:label="fragment_anime_favorite"
+        android:label="AnimeFavoriteFragment"
         tools:layout="@layout/fragment_anime_favorite">
         <action
             android:id="@+id/showDetail"
             app:destination="@id/detail_activity" />
     </fragment>
+
+    <!-- Mid Level -->
     <fragment
-        android:id="@+id/latest"
-        android:name="com.pedo.animecatalog.ui.latest.AnimeLatestFragment"
-        android:label="fragment_anime_latest"
-        tools:layout="@layout/fragment_anime_latest">
+        android:id="@+id/season"
+        android:name="com.pedo.animecatalog.ui.list.season.AnimeSeasonFragment"
+        android:label="AnimeSeasonFragment"
+        tools:layout="@layout/fragment_anime_season">
+
+    </fragment>
+    <fragment
+        android:id="@+id/types"
+        android:name="com.pedo.animecatalog.ui.list.types.AnimeTypesFragment"
+        android:label="AnimeTypesFragment">
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/detail_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/movies"
+        android:name="com.pedo.animecatalog.ui.list.types.movies.AnimeMoviesFragment"
+        android:label="AnimeMoviesFragment"/>
+    <fragment
+        android:id="@+id/series"
+        android:name="com.pedo.animecatalog.ui.list.types.series.AnimeSeriesFragment"
+        android:label="AnimeSeriesFragment"/>
+    <fragment
+        android:id="@+id/airing"
+        android:name="com.pedo.animecatalog.ui.list.airing.AnimeAiringFragment"
+        android:label="AnimeAiringFragment"
+        tools:layout="@layout/fragment_anime_airing">
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/detail_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/upcoming"
+        android:name="com.pedo.animecatalog.ui.list.upcoming.AnimeUpcomingFragment"
+        android:label="AnimeUpcomingFragment">
         <action
             android:id="@+id/showDetail"
             app:destination="@id/detail_activity" />
     </fragment>
 
+    <!-- Lower Level -->
     <activity
         android:id="@+id/detail_activity"
         android:name="com.pedo.animecatalog.PopupActivity"
-        android:label="Anime Detail"
+        android:label="AnimeDetail"
         tools:layout="@layout/activity_popup">
         <argument
             android:name="selectedMovie"

@@ -1,28 +1,53 @@
 package com.pedo.animecatalog.utils.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pedo.animecatalog.databinding.AnimeGridItemBinding
 import com.pedo.animecatalog.databinding.AnimeItemBinding
 import com.pedo.animecatalog.domain.Anime
+import com.pedo.animecatalog.utils.GRID_ITEM
+import com.pedo.animecatalog.utils.LIST_ITEM
+import com.pedo.animecatalog.utils.TYPE_GRID
+import com.pedo.animecatalog.utils.TYPE_LIST
 
-class AnimeListAdapter(private val onClickListener: OnClickListener) : ListAdapter<Anime, AnimeListAdapter.AnimeViewHolder>(
+class AnimeListAdapter(private val onClickListener: OnClickListener,val viewMode: String = TYPE_LIST) : ListAdapter<Anime, AnimeListAdapter.BaseAnimeViewHolder<*>>(
     DiffCallback
 ) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AnimeViewHolder {
-        return AnimeViewHolder(
-            AnimeItemBinding.inflate(LayoutInflater.from(parent.context))
-        )
+    ): BaseAnimeViewHolder<*> {
+        return when(viewType){
+            LIST_ITEM -> {
+                val binding = AnimeItemBinding.inflate(LayoutInflater.from(parent.context))
+                AnimeListViewHolder(binding)
+            }
+            GRID_ITEM -> {
+                val binding = AnimeGridItemBinding.inflate(LayoutInflater.from(parent.context))
+                AnimeGridViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Invalid View Type")
+        }
     }
 
-    override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val movie = getItem(position)
-        holder.bind(movie,onClickListener)
+    override fun onBindViewHolder(holder: BaseAnimeViewHolder<*>, position: Int) {
+        val anime = getItem(position)
+        when(holder){
+            is AnimeListViewHolder -> holder.bind(anime,onClickListener)
+            is AnimeGridViewHolder -> holder.bind(anime,onClickListener)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when(viewMode){
+            TYPE_LIST -> LIST_ITEM
+            TYPE_GRID -> GRID_ITEM
+            else -> throw IllegalArgumentException("Wrong Type!")
+        }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Anime>(){
@@ -36,7 +61,18 @@ class AnimeListAdapter(private val onClickListener: OnClickListener) : ListAdapt
 
     }
 
-    class AnimeViewHolder(private val binding : AnimeItemBinding) : RecyclerView.ViewHolder(binding.root){
+    //base view holder
+    abstract class BaseAnimeViewHolder<T>(itemView : View) : RecyclerView.ViewHolder(itemView)
+
+    class AnimeListViewHolder(val binding : AnimeItemBinding) : BaseAnimeViewHolder<AnimeItemBinding>(binding.root){
+        fun bind(anime : Anime,itemClick : OnClickListener){
+            binding.anime = anime
+            binding.onClickListener = itemClick
+            binding.executePendingBindings()
+        }
+    }
+
+    class AnimeGridViewHolder(val binding : AnimeGridItemBinding) : BaseAnimeViewHolder<AnimeGridItemBinding>(binding.root){
         fun bind(anime : Anime,itemClick : OnClickListener){
             binding.anime = anime
             binding.onClickListener = itemClick

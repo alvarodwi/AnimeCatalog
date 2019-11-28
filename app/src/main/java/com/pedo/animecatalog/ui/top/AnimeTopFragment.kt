@@ -1,4 +1,4 @@
-package com.pedo.animecatalog.ui.favorite
+package com.pedo.animecatalog.ui.top
 
 
 import android.os.Bundle
@@ -10,20 +10,25 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.pedo.animecatalog.R
-import com.pedo.animecatalog.databinding.FragmentAnimeFavoriteBinding
+import com.pedo.animecatalog.databinding.FragmentAnimeTopBinding
 import com.pedo.animecatalog.utils.AnimeListingStatus
 import com.pedo.animecatalog.utils.TYPE_GRID
 import com.pedo.animecatalog.utils.TYPE_LIST
 import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
 import com.pedo.animecatalog.utils.determineGridSpan
 
-class AnimeFavoriteFragment : Fragment() {
-    private val viewModel: AnimeFavoriteViewModel by lazy {
+/**
+ * A simple [Fragment] subclass.
+ */
+class AnimeTopFragment : Fragment() {
+
+    private val viewModel: AnimeTopViewModel by lazy {
         ViewModelProviders.of(
             this,
-            AnimeFavoriteViewModel.Factory("tv", activity!!.application)
-        ).get(AnimeFavoriteViewModel::class.java)
+            AnimeTopViewModel.Factory("tv",activity!!.application)
+        ).get(AnimeTopViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -31,33 +36,31 @@ class AnimeFavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val activity = requireNotNull(activity)
-        val binding = FragmentAnimeFavoriteBinding.inflate(inflater)
+        val binding = FragmentAnimeTopBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        viewModel.viewMode.observe(this, Observer { type ->
-            type?.let {
-                when (it) {
+        viewModel.viewMode.observe(this, Observer {type ->
+            type?.let{
+                when(it){
                     TYPE_LIST -> {
-                        binding.animeFavoriteRv.layoutManager =
-                            LinearLayoutManager(activity.applicationContext)
-                        binding.animeFavoriteRv.adapter =
+                        binding.animeTopRv.layoutManager = LinearLayoutManager(activity.applicationContext)
+                        binding.animeTopRv.adapter =
                             AnimeListAdapter(
                                 AnimeListAdapter.OnClickListener {
                                     viewModel.displayMovieDetail(it)
                                 })
                     }
                     TYPE_GRID -> {
-                        binding.animeFavoriteRv.layoutManager = GridLayoutManager(
+                        binding.animeTopRv.layoutManager = GridLayoutManager(
                             activity.applicationContext,
                             determineGridSpan(activity.applicationContext)
                         )
-                        binding.animeFavoriteRv.adapter =
+                        binding.animeTopRv.adapter =
                             AnimeListAdapter(
                                 AnimeListAdapter.OnClickListener {
                                     viewModel.displayMovieDetail(it)
-                                }, TYPE_GRID
-                            )
+                                }, TYPE_GRID)
                     }
                 }
             }
@@ -66,22 +69,25 @@ class AnimeFavoriteFragment : Fragment() {
         viewModel.navigateToDetail.observe(this, Observer { anime ->
             anime?.let {
                 this.findNavController().navigate(
-                    AnimeFavoriteFragmentDirections.showDetail(it)
+                    AnimeTopFragmentDirections.showDetail(it)
                 )
                 viewModel.displayMovieDetailCompleted()
             }
         })
 
-        binding.srlFavorites.setOnRefreshListener {
+        binding.srlTop.setOnRefreshListener {
             viewModel.onRefresh()
         }
 
         viewModel.status.observe(this, Observer {
-            it?.let { status ->
-                when (status) {
-                    AnimeListingStatus.LOADING -> binding.srlFavorites.isRefreshing = true
-                    AnimeListingStatus.DONE, AnimeListingStatus.ERROR -> binding.srlFavorites.isRefreshing =
-                        false
+            it?.let{ status ->
+                when(status){
+                    AnimeListingStatus.LOADING -> binding.srlTop.isRefreshing = true
+                    AnimeListingStatus.DONE -> binding.srlTop.isRefreshing = false
+                    AnimeListingStatus.ERROR -> {
+                        binding.srlTop.isRefreshing = false
+                        Snackbar.make(view!!,"Cannot Refresh Network Data",Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         })
@@ -101,14 +107,14 @@ class AnimeFavoriteFragment : Fragment() {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
+        inflater.inflate(R.menu.toolbar_menu,menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        when(item.itemId){
             R.id.info -> {
-                Toast.makeText(activity, "About Click!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity,"About Click!",Toast.LENGTH_SHORT).show()
             }
             R.id.list -> {
                 viewModel.changeViewType(TYPE_LIST)
@@ -119,5 +125,4 @@ class AnimeFavoriteFragment : Fragment() {
         }
         return true
     }
-
 }

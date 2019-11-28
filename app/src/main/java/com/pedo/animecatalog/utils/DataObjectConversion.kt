@@ -173,7 +173,7 @@ fun NetworkAnime.asDatabaseModel() : AnimeModel{
 }
 
 //list network model as list domain model
-fun JikanTopResponse.asDomainModels() : List<Anime>{
+fun JikanTopResponse.asDomainModel() : List<Anime>{
     return animeList.map{
         Anime(
             id = it.id,
@@ -206,6 +206,81 @@ fun JikanTopResponse.asDomainModels() : List<Anime>{
             genres = convertGenresToListString(it.genres),
             openingThemes = it.openingThemes,
             endingThemes = it.endingThemes
+        )
+    }
+}
+
+fun List<AnimeModel>.asDomainModel() : List<Anime>{
+        return map{
+            Anime(
+                id = it.id,
+                url = it.url,
+                imageUrl = it.imageUrl,
+                trailerUrl = it.trailerUrl,
+                title = it.title,
+                titleEnglish = it.titleEnglish,
+                titleJapanese = it.titleJapanese,
+                titleSynonyms = convertStringToListString(it.titleSynonyms),
+                type = it.type,
+                source = it.source,
+                episodes = it.episodes,
+                status = it.status,
+                airing = it.airing,
+                aired = it.aired,
+                duration = it.duration,
+                rating = it.rating,
+                score = it.score,
+                scoredBy = it.scoredBy,
+                rank = it.rank,
+                popularity = it.popularity,
+                members = it.members,
+                favorites = it.favorites,
+                synopsis = it.synopsis,
+                background = it.background,
+                premiered = it.premiered,
+                broadcast = it.broadcast,
+                studios = convertStringToListString(it.studios),
+                genres = convertStringToListString(it.genres),
+                openingThemes = convertStringToListString(it.openingThemes),
+                endingThemes = convertStringToListString(it.endingThemes)
+            )
+        }
+}
+
+//list network model as list domain model
+fun JikanTopResponse.asDatabaseModel() : List<AnimeModel>{
+    return animeList.map{
+        AnimeModel(
+            id = it.id,
+            url = it.url,
+            imageUrl = it.imageUrl,
+            trailerUrl = it.trailerUrl,
+            title = it.title,
+            titleEnglish = it.titleEnglish,
+            titleJapanese = it.titleJapanese,
+            titleSynonyms = convertListStringToString(it.titleSynonyms),
+            type = it.type,
+            source = it.source,
+            episodes = it.episodes ?: 0,
+            status = it.status,
+            airing = it.airing,
+            aired = it.aired?.string,
+            duration = it.duration,
+            rating = it.rating,
+            score = it.score,
+            scoredBy = it.scoredBy,
+            rank = it.rank,
+            popularity = it.popularity,
+            members = it.members,
+            favorites = it.favorites,
+            synopsis = it.synopsis,
+            background = it.background,
+            premiered = it.premiered,
+            broadcast = it.broadcast,
+            studios = convertStudiosToString(it.studios),
+            genres = convertGenresToString(it.genres),
+            openingThemes = convertListStringToString(it.openingThemes),
+            endingThemes = convertListStringToString(it.endingThemes)
         )
     }
 }

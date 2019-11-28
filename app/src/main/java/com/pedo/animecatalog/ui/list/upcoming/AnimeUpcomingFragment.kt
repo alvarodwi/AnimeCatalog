@@ -1,30 +1,24 @@
-package com.pedo.animecatalog.ui.listing.movies
-
+package com.pedo.animecatalog.ui.list.upcoming
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-
-import com.pedo.animecatalog.databinding.FragmentAnimeMoviesBinding
+import com.pedo.animecatalog.databinding.FragmentAnimeUpcomingBinding
+import com.pedo.animecatalog.ui.list.AnimeListViewModel
+import com.pedo.animecatalog.utils.AnimeListingStatus
 import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
-import com.pedo.animecatalog.ui.listing.AnimeListFragmentDirections
-import com.pedo.animecatalog.ui.listing.AnimeListViewModel
-import timber.log.Timber
 
-/**
- * A simple [Fragment] subclass.
- */
-class AnimeMoviesFragment : Fragment() {
+class AnimeUpcomingFragment : Fragment() {
     private val viewModel: AnimeListViewModel by lazy {
         ViewModelProviders.of(
             this,
-            AnimeListViewModel.Factory("movie",activity!!.application)
+            AnimeListViewModel.Factory("upcoming",activity!!.application)
         ).get(AnimeListViewModel::class.java)
     }
 
@@ -33,12 +27,12 @@ class AnimeMoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val activity = requireNotNull(activity)
-        val binding = FragmentAnimeMoviesBinding.inflate(inflater)
+        val binding = FragmentAnimeUpcomingBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.animeMoviesRv.layoutManager = LinearLayoutManager(activity.applicationContext)
-        binding.animeMoviesRv.adapter =
+        binding.animeUpcomingRv.layoutManager = LinearLayoutManager(activity.applicationContext)
+        binding.animeUpcomingRv.adapter =
             AnimeListAdapter(
                 AnimeListAdapter.OnClickListener {
                     viewModel.displayMovieDetail(it)
@@ -47,9 +41,18 @@ class AnimeMoviesFragment : Fragment() {
         viewModel.navigateToDetail.observe(this, Observer { anime ->
             anime?.let {
                 this.findNavController().navigate(
-                    AnimeListFragmentDirections.showDetail(it)
+                    AnimeUpcomingFragmentDirections.showDetail(it)
                 )
                 viewModel.displayMovieDetailCompleted()
+            }
+        })
+
+        viewModel.status.observe(this, Observer {
+            it?.let{ status ->
+                when(status){
+                    AnimeListingStatus.LOADING -> binding.srlUpcoming.isRefreshing = true
+                    AnimeListingStatus.DONE, AnimeListingStatus.ERROR -> binding.srlUpcoming.isRefreshing = false
+                }
             }
         })
 
