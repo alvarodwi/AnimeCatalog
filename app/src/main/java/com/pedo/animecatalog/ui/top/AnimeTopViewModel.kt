@@ -2,11 +2,10 @@ package com.pedo.animecatalog.ui.top
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.pedo.animecatalog.database.getDatabase
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
 import com.pedo.animecatalog.utils.AnimeListingStatus
-import com.pedo.animecatalog.utils.TYPE_LIST
+import com.pedo.animecatalog.utils.getRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,7 +17,7 @@ class AnimeTopViewModel(app: Application) : AndroidViewModel(app) {
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val repository: AnimeRepository = AnimeRepository(getDatabase(app))
+    private val repository: AnimeRepository = getRepository(app)
     //livedata
     //animes
     val animes = repository.topAnimes
@@ -29,15 +28,12 @@ class AnimeTopViewModel(app: Application) : AndroidViewModel(app) {
     //request status (api status)
     private val _status = MutableLiveData<AnimeListingStatus>()
 
-    private val _viewMode = MutableLiveData<String>()
-    val viewMode: LiveData<String>
-        get() = _viewMode
+    val oldViewMode = MutableLiveData<String>()
 
     val status: LiveData<AnimeListingStatus>
         get() = _status
 
     init {
-        _viewMode.value = TYPE_LIST
         refreshDataFromRepository()
     }
 
@@ -72,12 +68,11 @@ class AnimeTopViewModel(app: Application) : AndroidViewModel(app) {
         _navigateToDetail.value = null
     }
 
-    fun changeViewType(value: String) {
-        _viewMode.value = value
-        onRefresh()
+    fun setOldData(viewMode : String){
+        oldViewMode.value = viewMode
     }
 
-    class Factory(val type: String, val app: Application) : ViewModelProvider.Factory {
+    class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             if (modelClass.isAssignableFrom(AnimeTopViewModel::class.java)) {

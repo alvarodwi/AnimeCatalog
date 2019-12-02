@@ -2,7 +2,6 @@ package com.pedo.animecatalog.ui.search
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.pedo.animecatalog.database.getDatabase
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
 import com.pedo.animecatalog.utils.AnimeListingStatus
@@ -15,7 +14,7 @@ class AnimeSearchViewModel(app : Application) : AndroidViewModel(app) {
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val repository : AnimeRepository = AnimeRepository(getDatabase(app))
+    private val repository : AnimeRepository = AnimeRepository(app)
 
     //livedata
     private val _animes = MutableLiveData<List<Anime>>()

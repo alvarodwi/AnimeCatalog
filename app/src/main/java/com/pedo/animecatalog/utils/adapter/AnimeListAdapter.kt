@@ -14,9 +14,13 @@ import com.pedo.animecatalog.utils.LIST_ITEM
 import com.pedo.animecatalog.utils.TYPE_GRID
 import com.pedo.animecatalog.utils.TYPE_LIST
 
-class AnimeListAdapter(private val onClickListener: OnClickListener,val viewMode: String = TYPE_LIST) : ListAdapter<Anime, AnimeListAdapter.BaseAnimeViewHolder<*>>(
+class AnimeListAdapter(private val onClickListener: OnClickListener, private var viewMode: String = TYPE_LIST) : ListAdapter<Anime, AnimeListAdapter.BaseAnimeViewHolder<*>>(
     DiffCallback
-) {
+){
+    fun setAdapterViewMode(viewMode: String){
+        this.viewMode = viewMode
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

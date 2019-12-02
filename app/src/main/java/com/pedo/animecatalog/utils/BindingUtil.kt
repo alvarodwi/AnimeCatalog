@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.pedo.animecatalog.R
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
+import timber.log.Timber
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Anime>?) {
@@ -94,11 +95,11 @@ fun ImageView.bindRepoStatus(status: AnimeListingStatus?,repoData : List<Anime>?
 @BindingAdapter("showScore")
 fun TextView.showScore(score : Double?){
     score?.let{
-        if(score.equals(0.0)){
-            text = context.getString(R.string.text_no_score)
+        text = if(score.equals(0.0)){
+            context.getString(R.string.text_no_score)
         }else {
             val formatted = it.format(2)
-            text = context.resources.getString(R.string.text_score, formatted)
+            context.resources.getString(R.string.text_score, formatted)
         }
     }
 }

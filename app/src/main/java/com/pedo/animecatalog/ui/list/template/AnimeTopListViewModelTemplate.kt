@@ -1,12 +1,12 @@
-package com.pedo.animecatalog.ui.list
+package com.pedo.animecatalog.ui.list.template
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.pedo.animecatalog.database.getDatabase
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
 import com.pedo.animecatalog.utils.AnimeListingStatus
 import com.pedo.animecatalog.utils.asDomainModel
+import com.pedo.animecatalog.utils.getRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,7 +15,7 @@ import timber.log.Timber
 
 //generic -- api based -- view model
 //used in airing,upcoming,types
-class AnimeListViewModel(val animeType : String,app : Application) : AndroidViewModel(app) {
+class AnimeTopListViewModelTemplate(private val animeType : String, app : Application) : AndroidViewModel(app) {
     //coroutine
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -37,7 +37,9 @@ class AnimeListViewModel(val animeType : String,app : Application) : AndroidView
     val page : LiveData<Int>
         get() = _page
 
-    private val repository : AnimeRepository = AnimeRepository(getDatabase(app))
+    val oldViewMode = MutableLiveData<String>()
+
+    private val repository: AnimeRepository = getRepository(app)
 
     init{
         initAnimes(animeType)
@@ -82,6 +84,11 @@ class AnimeListViewModel(val animeType : String,app : Application) : AndroidView
         initAnimes(animeType)
     }
 
+    fun setOldData(viewMode : String){
+        oldViewMode.value = viewMode
+    }
+
+
     fun onLoadMore(){
         _page.value?.plus(1)
         val pageNumber = requireNotNull(_page.value)
@@ -105,8 +112,11 @@ class AnimeListViewModel(val animeType : String,app : Application) : AndroidView
     class Factory(val type : String,val app: Application) : ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            if(modelClass.isAssignableFrom(AnimeListViewModel::class.java)){
-                return AnimeListViewModel(type,app) as T
+            if(modelClass.isAssignableFrom(AnimeTopListViewModelTemplate::class.java)){
+                return AnimeTopListViewModelTemplate(
+                    type,
+                    app
+                ) as T
             }
             throw IllegalArgumentException("Unable To Construct ViewModel")
         }

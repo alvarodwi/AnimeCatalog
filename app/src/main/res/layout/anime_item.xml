@@ -23,7 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_dimen"
         android:layout_marginBottom="@dimen/default_dimen"
-        android:onClick="@{() -> onClickListener.onClick(anime)}">
+        android:padding="6dp"
+        android:onClick="@{() -> onClickListener.onClick(anime)}"
+        android:background="?android:attr/selectableItemBackground"
+        >
 
         <RelativeLayout
             android:id="@+id/img_container"

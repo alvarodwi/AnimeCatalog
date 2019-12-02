@@ -1,5 +1,4 @@
-package com.pedo.animecatalog.ui.top
-
+package com.pedo.animecatalog.ui.list.template
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,9 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.pedo.animecatalog.MainViewModel
-import com.pedo.animecatalog.databinding.FragmentAnimeTopBinding
+import com.pedo.animecatalog.databinding.FragmentAnimeTopListBinding
+import com.pedo.animecatalog.ui.list.types.airing.AnimeAiringFragmentDirections
 import com.pedo.animecatalog.utils.AnimeListingStatus
 import com.pedo.animecatalog.utils.TYPE_GRID
 import com.pedo.animecatalog.utils.TYPE_LIST
@@ -21,18 +20,18 @@ import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
 import com.pedo.animecatalog.utils.determineGridSpan
 import timber.log.Timber
 
-/**
- * A simple [Fragment] subclass.
- */
-class AnimeTopFragment : Fragment() {
-    private lateinit var binding: FragmentAnimeTopBinding
+abstract class AnimeTopListFragmentTemplate(subType: String) : Fragment() {
+    private lateinit var binding: FragmentAnimeTopListBinding
     private lateinit var animeAdapter : AnimeListAdapter
 
-    private val viewModel: AnimeTopViewModel by lazy {
+    private val viewModel: AnimeTopListViewModelTemplate by lazy {
         ViewModelProvider(
             this,
-            AnimeTopViewModel.Factory(activity!!.application)
-        ).get(AnimeTopViewModel::class.java)
+            AnimeTopListViewModelTemplate.Factory(
+                subType,
+                activity!!.application
+            )
+        ).get(AnimeTopListViewModelTemplate::class.java)
     }
 
     private val mainVM: MainViewModel by lazy {
@@ -43,9 +42,7 @@ class AnimeTopFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Timber.d("ON VIEW")
-        binding = FragmentAnimeTopBinding.inflate(inflater)
-
+        binding = FragmentAnimeTopListBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
@@ -53,31 +50,27 @@ class AnimeTopFragment : Fragment() {
             AnimeListAdapter.OnClickListener {
                 viewModel.displayMovieDetail(it)
             })
-        binding.animeTopRv.adapter = animeAdapter
+        binding.animeTopListRv.adapter = animeAdapter
 
         viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { anime ->
             anime?.let {
                 this.findNavController().navigate(
-                    AnimeTopFragmentDirections.showDetail(it)
+                    AnimeAiringFragmentDirections.showDetail(it)
                 )
                 viewModel.displayMovieDetailCompleted()
             }
         })
 
-        binding.srlTop.setOnRefreshListener {
+        binding.srlTopList.setOnRefreshListener {
             viewModel.onRefresh()
         }
 
         viewModel.status.observe(viewLifecycleOwner, Observer {
             it?.let { status ->
                 when (status) {
-                    AnimeListingStatus.LOADING -> binding.srlTop.isRefreshing = true
-                    AnimeListingStatus.DONE -> binding.srlTop.isRefreshing = false
-                    AnimeListingStatus.ERROR -> {
-                        binding.srlTop.isRefreshing = false
-                        Snackbar.make(view!!, "Cannot Refresh Network Data", Snackbar.LENGTH_SHORT)
-                            .show()
-                    }
+                    AnimeListingStatus.LOADING -> binding.srlTopList.isRefreshing = true
+                    AnimeListingStatus.DONE, AnimeListingStatus.ERROR -> binding.srlTopList.isRefreshing =
+                        false
                 }
             }
         })
@@ -87,7 +80,7 @@ class AnimeTopFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.animeTopRv.apply {
+        binding.animeTopListRv.apply {
             Timber.d("View Mode Value : ${mainVM.viewMode.value}")
             when (mainVM.viewMode.value) {
                 TYPE_GRID -> {
@@ -107,14 +100,14 @@ class AnimeTopFragment : Fragment() {
         mainVM.viewMode.observe(viewLifecycleOwner, Observer { viewMode ->
             viewMode?.let {
                 if (mainVM.hasViewModeChanged(viewModel.oldViewMode.value)) {
-                    Timber.d("Layout Manager : ${binding.animeTopRv.layoutManager}")
+                    Timber.d("Layout Manager : ${binding.animeTopListRv.layoutManager}")
                     when (it) {
                         TYPE_LIST -> {
-                            binding.animeTopRv.layoutManager = LinearLayoutManager(requireContext())
+                            binding.animeTopListRv.layoutManager = LinearLayoutManager(requireContext())
                             animeAdapter.setAdapterViewMode(TYPE_LIST)
                         }
                         TYPE_GRID -> {
-                            binding.animeTopRv.layoutManager = GridLayoutManager(
+                            binding.animeTopListRv.layoutManager = GridLayoutManager(
                                 requireContext(),
                                 determineGridSpan(requireContext())
                             )

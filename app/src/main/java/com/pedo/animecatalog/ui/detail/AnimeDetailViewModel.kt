@@ -5,17 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.pedo.animecatalog.database.getDatabase
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
 import com.pedo.animecatalog.utils.asDomainModel
+import com.pedo.animecatalog.utils.getRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class AnimeDetailViewModel(val movie: Anime, app: Application) : AndroidViewModel(app) {
+class AnimeDetailViewModel(private val movie: Anime, app: Application) : AndroidViewModel(app) {
     //coroutine
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -28,7 +28,7 @@ class AnimeDetailViewModel(val movie: Anime, app: Application) : AndroidViewMode
     val isFavorited : LiveData<Boolean>
         get() = _isFavorited
 
-    private val repository : AnimeRepository = AnimeRepository(getDatabase(app))
+    private val repository: AnimeRepository = getRepository(app)
 
     init {
         _selectedMovie.value = movie

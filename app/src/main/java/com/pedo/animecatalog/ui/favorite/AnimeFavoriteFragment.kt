@@ -2,25 +2,26 @@ package com.pedo.animecatalog.ui.favorite
 
 
 import android.os.Bundle
-import android.view.*
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pedo.animecatalog.R
 import com.pedo.animecatalog.databinding.FragmentAnimeFavoriteBinding
 import com.pedo.animecatalog.utils.AnimeListingStatus
 import com.pedo.animecatalog.utils.TYPE_GRID
 import com.pedo.animecatalog.utils.TYPE_LIST
 import com.pedo.animecatalog.utils.adapter.AnimeListAdapter
 import com.pedo.animecatalog.utils.determineGridSpan
+import com.pedo.animecatalog.MainViewModel
 
 class AnimeFavoriteFragment : Fragment() {
     private val viewModel: AnimeFavoriteViewModel by lazy {
-        ViewModelProviders.of(
+        ViewModelProvider(
             this,
             AnimeFavoriteViewModel.Factory("tv", activity!!.application)
         ).get(AnimeFavoriteViewModel::class.java)
@@ -35,35 +36,35 @@ class AnimeFavoriteFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        viewModel.viewMode.observe(this, Observer { type ->
-            type?.let {
+        val animeAdapter = AnimeListAdapter(
+            AnimeListAdapter.OnClickListener {
+                viewModel.displayMovieDetail(it)
+            })
+        binding.animeFavoriteRv.adapter = animeAdapter
+        val linearLayoutManager = LinearLayoutManager(activity.applicationContext)
+        val gridLayoutManager = GridLayoutManager(
+            activity.applicationContext,
+            determineGridSpan(activity.applicationContext)
+        )
+
+        val mainVM = ViewModelProvider(activity).get(MainViewModel::class.java)
+
+        mainVM.viewMode.observe(viewLifecycleOwner, Observer { viewMode ->
+            viewMode?.let {
                 when (it) {
                     TYPE_LIST -> {
-                        binding.animeFavoriteRv.layoutManager =
-                            LinearLayoutManager(activity.applicationContext)
-                        binding.animeFavoriteRv.adapter =
-                            AnimeListAdapter(
-                                AnimeListAdapter.OnClickListener {
-                                    viewModel.displayMovieDetail(it)
-                                })
+                        binding.animeFavoriteRv.layoutManager = linearLayoutManager
+                        animeAdapter.setAdapterViewMode(TYPE_LIST)
                     }
                     TYPE_GRID -> {
-                        binding.animeFavoriteRv.layoutManager = GridLayoutManager(
-                            activity.applicationContext,
-                            determineGridSpan(activity.applicationContext)
-                        )
-                        binding.animeFavoriteRv.adapter =
-                            AnimeListAdapter(
-                                AnimeListAdapter.OnClickListener {
-                                    viewModel.displayMovieDetail(it)
-                                }, TYPE_GRID
-                            )
+                        binding.animeFavoriteRv.layoutManager = gridLayoutManager
+                        animeAdapter.setAdapterViewMode(TYPE_GRID)
                     }
                 }
             }
         })
 
-        viewModel.navigateToDetail.observe(this, Observer { anime ->
+        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { anime ->
             anime?.let {
                 this.findNavController().navigate(
                     AnimeFavoriteFragmentDirections.showDetail(it)
@@ -76,7 +77,7 @@ class AnimeFavoriteFragment : Fragment() {
             viewModel.onRefresh()
         }
 
-        viewModel.status.observe(this, Observer {
+        viewModel.status.observe(viewLifecycleOwner, Observer {
             it?.let { status ->
                 when (status) {
                     AnimeListingStatus.LOADING -> binding.srlFavorites.isRefreshing = true
@@ -93,31 +94,4 @@ class AnimeFavoriteFragment : Fragment() {
         super.onStart()
         viewModel.onRefresh()
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.info -> {
-                Toast.makeText(activity, "About Click!", Toast.LENGTH_SHORT).show()
-            }
-            R.id.list -> {
-                viewModel.changeViewType(TYPE_LIST)
-            }
-            R.id.grid -> {
-                viewModel.changeViewType(TYPE_GRID)
-            }
-        }
-        return true
-    }
-
 }

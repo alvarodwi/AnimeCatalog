@@ -38,7 +38,7 @@ class AnimeListFragment : Fragment() {
         return binding.root
     }
 
-    fun navigateTo(destination : NavDirections){
+    private fun navigateTo(destination : NavDirections){
         this.findNavController().navigate(destination)
     }
 }

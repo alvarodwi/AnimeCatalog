@@ -27,7 +27,7 @@
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:background="?android:attr/windowBackground"
+        android:background="@color/colorPrimary"
         app:itemBackground="@color/colorPrimary"
         android:foreground="?attr/selectableItemBackground"
         app:itemIconTint="@android:color/white"

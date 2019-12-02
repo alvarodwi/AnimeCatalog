@@ -50,7 +50,9 @@
         android:name="com.pedo.animecatalog.ui.list.season.AnimeSeasonFragment"
         android:label="AnimeSeasonFragment"
         tools:layout="@layout/fragment_anime_season">
-
+        <action
+            android:id="@+id/showDetail"
+            app:destination="@id/detail_activity" />
     </fragment>
     <fragment
         android:id="@+id/types"
@@ -61,25 +63,16 @@
             app:destination="@id/detail_activity" />
     </fragment>
     <fragment
-        android:id="@+id/movies"
-        android:name="com.pedo.animecatalog.ui.list.types.movies.AnimeMoviesFragment"
-        android:label="AnimeMoviesFragment"/>
-    <fragment
-        android:id="@+id/series"
-        android:name="com.pedo.animecatalog.ui.list.types.series.AnimeSeriesFragment"
-        android:label="AnimeSeriesFragment"/>
-    <fragment
         android:id="@+id/airing"
-        android:name="com.pedo.animecatalog.ui.list.airing.AnimeAiringFragment"
-        android:label="AnimeAiringFragment"
-        tools:layout="@layout/fragment_anime_airing">
+        android:name="com.pedo.animecatalog.ui.list.types.airing.AnimeAiringFragment"
+        android:label="AnimeAiringFragment">
         <action
             android:id="@+id/showDetail"
             app:destination="@id/detail_activity" />
     </fragment>
     <fragment
         android:id="@+id/upcoming"
-        android:name="com.pedo.animecatalog.ui.list.upcoming.AnimeUpcomingFragment"
+        android:name="com.pedo.animecatalog.ui.list.types.upcoming.AnimeUpcomingFragment"
         android:label="AnimeUpcomingFragment">
         <action
             android:id="@+id/showDetail"
