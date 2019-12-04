@@ -34,6 +34,5 @@ data class AnimeModel(
     val studios : String? = null,
     val genres : String? = null,
     val openingThemes : String? = null,
-    val endingThemes : String? = null,
-    var isLoved : Boolean = false
+    val endingThemes : String? = null
 )

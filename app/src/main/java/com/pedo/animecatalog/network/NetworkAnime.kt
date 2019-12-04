@@ -4,14 +4,14 @@ import com.squareup.moshi.Json
 
 data class NetworkAnime(
     @Json(name = "mal_id") val id : Int,
-    val rank : Int,
+    val rank : Int?, //anticipating season response that not carrying rank
     val title : String,
     val url : String,
     @Json(name = "image_url") val imageUrl : String,
     val type : String,
-    val episodes : Int?,
+    val episodes : Int?, //anticipating upcoming anime with unknown episode
     val members : Int,
-    val score : Double,
+    val score : Double?, //anticipating some unknown anime with no score
     @Json(name = "trailer_url") val trailerUrl : String?,
     @Json(name = "title_english") val titleEnglish : String?,
     @Json(name = "title_japanese") val titleJapanese : String?,
@@ -32,5 +32,9 @@ data class NetworkAnime(
     val studios : List<NetworkStudio>?,
     val genres : List<NetworkGenre>?,
     @Json(name = "opening_themes") val openingThemes : List<String>?,
-    @Json(name = "ending_themes") val endingThemes : List<String>?
+    @Json(name = "ending_themes") val endingThemes : List<String>?,
+    //to accept season response
+    val r18 : Boolean?,
+    val kids : Boolean?,
+    val continuing : Boolean?
 )

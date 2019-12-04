@@ -1,20 +1,21 @@
 package com.pedo.animecatalog.ui.detail
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
-import androidx.lifecycle.*
-import com.pedo.animecatalog.database.getDatabase
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
 import com.pedo.animecatalog.utils.asDomainModel
+import com.pedo.animecatalog.utils.getRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class AnimeDetailViewModel(movie: Anime, app: Application) : AndroidViewModel(app) {
+class AnimeDetailViewModel(private val movie: Anime, app: Application) : AndroidViewModel(app) {
     //coroutine
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -27,20 +28,24 @@ class AnimeDetailViewModel(movie: Anime, app: Application) : AndroidViewModel(ap
     val isFavorited : LiveData<Boolean>
         get() = _isFavorited
 
-    private val repository : AnimeRepository = AnimeRepository(getDatabase(app))
+    private val repository: AnimeRepository = getRepository(app)
 
     init {
         _selectedMovie.value = movie
-        syncDetails(movie.id)
+        _isFavorited.value = false
+        syncDetails()
     }
 
-    private fun syncDetails(id : Int){
+    private fun syncDetails(id : Int = movie.id){
         viewModelScope.launch {
             try{
                 _selectedMovie.value = repository.getAnime(id).asDomainModel()
                 //if movie is already in database
                 val existingMovie = repository.findAnime(id)
-                _isFavorited.value = existingMovie.isLoved
+                //updating existing data on sync
+                if(existingMovie != null){
+                    _isFavorited.value = existingMovie.isLoved
+                }
             }catch (exception : Exception){
                 Timber.e(exception)
             }
@@ -56,5 +61,16 @@ class AnimeDetailViewModel(movie: Anime, app: Application) : AndroidViewModel(ap
             repository.markAsFavorite(_selectedMovie.value!!)
             _isFavorited.value = true
         }
+    }
+
+    fun unMarkFavorite(){
+        viewModelScope.launch {
+            repository.unMarkAsFavorite(_selectedMovie.value!!)
+            _isFavorited.value = false
+        }
+    }
+
+    fun onRefresh(){
+        syncDetails()
     }
 }

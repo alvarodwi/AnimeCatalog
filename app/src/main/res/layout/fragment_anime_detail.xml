@@ -60,8 +60,6 @@
                 app:layout_constraintTop_toBottomOf="@id/score_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:text="@string/text_favorites"
-                android:onClick="@{() -> viewModel.markFavorite()}"
-                app:setVisibility="@{!viewModel.isFavorited()}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

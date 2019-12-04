@@ -20,6 +20,6 @@ class PopupActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        //do nothing
+        this.finish()
     }
 }

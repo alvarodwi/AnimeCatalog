@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/listing"
-        android:icon="@drawable/ic_list_black_24dp"
-        android:title="@string/text_listing" />
+        android:id="@+id/top"
+        android:icon="@drawable/ic_live_tv"
+        android:title="@string/text_top" />
 
     <item
-        android:id="@+id/latest"
-        android:icon="@drawable/ic_live_tv_black_24dp"
-        android:title="@string/text_latest"/>
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/text_search"/>
+
+    <item
+        android:id="@+id/lists"
+        android:icon="@drawable/ic_list"
+        android:title="@string/text_list"/>
 
     <item
         android:id="@+id/favorites"
-        android:icon="@drawable/ic_star_black_24dp"
+        android:icon="@drawable/ic_star"
         android:title="@string/text_favorites"/>
 </menu>

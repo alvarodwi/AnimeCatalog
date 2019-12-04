@@ -1,24 +1,26 @@
-package com.pedo.animecatalog.ui.listing
+package com.pedo.animecatalog.ui.list.season
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.pedo.animecatalog.database.getDatabase
 import com.pedo.animecatalog.domain.Anime
 import com.pedo.animecatalog.repository.AnimeRepository
-import com.pedo.animecatalog.utils.asDomainModels
-import kotlinx.coroutines.*
+import com.pedo.animecatalog.utils.AnimeListingStatus
+import com.pedo.animecatalog.utils.asDomainModel
+import com.pedo.animecatalog.utils.getRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-enum class JikanApiStatus{
-    LOADING,DONE,ERROR
-}
-
-class AnimeListViewModel(animeType : String,app : Application) : AndroidViewModel(app) {
+class AnimeSeasonViewModel(app : Application) : AndroidViewModel(app) {
     //coroutine
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     //livedata
+    private val mYear : Int = 2019
+    private val mSeason : String = "fall"
     //animes
     private val _animes = MutableLiveData<List<Anime>>()
     val animes : LiveData<List<Anime>>
@@ -28,29 +30,28 @@ class AnimeListViewModel(animeType : String,app : Application) : AndroidViewMode
     val navigateToDetail : LiveData<Anime>
         get() = _navigateToDetail
     //request status (api status)
-    private val _status = MutableLiveData<JikanApiStatus>()
-    val status : LiveData<JikanApiStatus>
+    private val _status = MutableLiveData<AnimeListingStatus>()
+    val status : LiveData<AnimeListingStatus>
         get() = _status
+    val oldViewMode = MutableLiveData<String>()
 
-    private val repository : AnimeRepository = AnimeRepository(getDatabase(app))
+    private val repository: AnimeRepository = getRepository(app)
 
     init{
-        getAnimes(1,animeType)
+        getSeasonalAnime(mYear,mSeason)
     }
 
-    //getAllMovieFromJikanApi
-    private fun getAnimes(page : Int,type : String){
+    private fun getSeasonalAnime(year : Int,season : String){
         viewModelScope.launch {
-            Timber.d("Top Anime GET")
             try{
-                _status.value = JikanApiStatus.LOADING
-                val getMovies = repository.getTopAnime(page,type)
-                _animes.value = getMovies.asDomainModels()
-                _status.value = JikanApiStatus.DONE
+                _status.value = AnimeListingStatus.LOADING
+                val apiAnimes = repository.getSeasonalAnimes(year,season)
+                _animes.value = apiAnimes.asDomainModel()
+                _status.value = AnimeListingStatus.DONE
             }catch (e: Exception){
                 Timber.e(e)
                 Timber.d("API FAIL")
-                _status.value = JikanApiStatus.ERROR
+                _status.value = AnimeListingStatus.ERROR
                 _animes.value = ArrayList()
             }
         }
@@ -70,11 +71,19 @@ class AnimeListViewModel(animeType : String,app : Application) : AndroidViewMode
         _navigateToDetail.value = null
     }
 
-    class Factory(val type : String,val app: Application) : ViewModelProvider.Factory{
+    fun onRefresh(){
+        getSeasonalAnime(mYear,mSeason)
+    }
+
+    fun setOldData(viewMode : String){
+        oldViewMode.value = viewMode
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            if(modelClass.isAssignableFrom(AnimeListViewModel::class.java)){
-                return AnimeListViewModel(type,app) as T
+            if(modelClass.isAssignableFrom(AnimeSeasonViewModel::class.java)){
+                return AnimeSeasonViewModel(app) as T
             }
             throw IllegalArgumentException("Unable To Construct ViewModel")
         }

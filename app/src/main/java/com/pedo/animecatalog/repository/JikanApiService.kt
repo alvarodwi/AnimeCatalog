@@ -1,5 +1,7 @@
 package com.pedo.animecatalog.repository
 
+import com.pedo.animecatalog.network.JikanSeasonArchiveResponse
+import com.pedo.animecatalog.network.JikanSeasonResponse
 import com.pedo.animecatalog.network.JikanTopResponse
 import com.pedo.animecatalog.network.NetworkAnime
 import com.squareup.moshi.Moshi
@@ -21,11 +23,29 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface JikanApiService{
+    //get anime by id
     @GET("anime/{id}")
     suspend fun getAnime(@Path("id")id : Int) : NetworkAnime
 
+    //get top anime
+    @GET("top/anime")
+    suspend fun getTopAnime() : JikanTopResponse
+
+    //get top anime with pages and subtype
     @GET("top/anime/{page}/{subType}")
     suspend fun getAll(@Path("page")page : Int,@Path("subType")subType :String) : JikanTopResponse
+
+    //get seasonal anime by year and season
+    @GET("season/{year}/{season}")
+    suspend fun getSeasonalAnime(@Path("year")year: Int,@Path("season")season: String) : JikanSeasonResponse
+
+    //get anime that have announced for 'next' season
+    @GET("season/later")
+    suspend fun getSeasonLaterAnime() : JikanSeasonResponse
+
+    //get season archive (to get latest year available)
+    @GET("season/archive")
+    suspend fun getSeasonArchive() : JikanSeasonArchiveResponse
 }
 
 object JikanApi{

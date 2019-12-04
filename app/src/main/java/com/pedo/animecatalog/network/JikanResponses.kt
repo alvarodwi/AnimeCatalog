@@ -11,3 +11,7 @@ data class JikanSeasonResponse(
     @Json(name = "season_name")val season : String,
     @Json(name = "anime") val animeList : List<NetworkAnime>
 )
+
+data class JikanSeasonArchiveResponse(
+    @Json(name = "archive")val seasonArchive: List<NetworkSeason>
+)
