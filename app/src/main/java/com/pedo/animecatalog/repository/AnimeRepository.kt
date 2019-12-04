@@ -33,6 +33,9 @@ class AnimeRepository(context : Context) {
     //get animelist,depending on type (also paging) from api
     suspend fun getAnimes(page: Int, type: String) = jikanClient.getAll(page, type)
 
+    //get anime list depending on season
+    suspend fun getSeasonalAnimes(year : Int,season: String) = jikanClient.getSeasonalAnime(year,season)
+
     //get anime depending on anime ID from api
     suspend fun getAnime(id: Int) = jikanClient.getAnime(id)
 

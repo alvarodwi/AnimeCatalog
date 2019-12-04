@@ -2,6 +2,7 @@ package com.pedo.animecatalog.utils
 
 import com.pedo.animecatalog.database.AnimeModel
 import com.pedo.animecatalog.domain.Anime
+import com.pedo.animecatalog.network.JikanSeasonResponse
 import com.pedo.animecatalog.network.JikanTopResponse
 import com.pedo.animecatalog.network.NetworkAnime
 
@@ -112,9 +113,9 @@ fun NetworkAnime.asDomainModel() : Anime{
         aired = airedString,
         duration = duration,
         rating = rating,
-        score = score,
+        score = score ?: 0.0,
         scoredBy = scoredBy,
-        rank = rank,
+        rank = rank ?: 0,
         popularity = popularity,
         members = members,
         favorites = favorites,
@@ -155,9 +156,9 @@ fun NetworkAnime.asDatabaseModel() : AnimeModel{
         aired = airedString,
         duration = duration,
         rating = rating,
-        score = score,
+        score = score ?: 0.0,
         scoredBy = scoredBy,
-        rank = rank,
+        rank = rank  ?: 0,
         popularity = popularity,
         members = members,
         favorites = favorites,
@@ -192,9 +193,47 @@ fun JikanTopResponse.asDomainModel() : List<Anime>{
             aired = it.aired?.string,
             duration = it.duration,
             rating = it.rating,
-            score = it.score,
+            score = it.score ?: 0.0,
             scoredBy = it.scoredBy,
-            rank = it.rank,
+            rank = it.rank  ?: 0,
+            popularity = it.popularity,
+            members = it.members,
+            favorites = it.favorites,
+            synopsis = it.synopsis,
+            background = it.background,
+            premiered = it.premiered,
+            broadcast = it.broadcast,
+            studios = convertStudiosToListString(it.studios),
+            genres = convertGenresToListString(it.genres),
+            openingThemes = it.openingThemes,
+            endingThemes = it.endingThemes
+        )
+    }
+}
+
+//list network model (season) as list domain model
+fun JikanSeasonResponse.asDomainModel() : List<Anime>{
+    return animeList.map{
+        Anime(
+            id = it.id,
+            url = it.url,
+            imageUrl = it.imageUrl,
+            trailerUrl = it.trailerUrl,
+            title = it.title,
+            titleEnglish = it.titleEnglish,
+            titleJapanese = it.titleJapanese,
+            titleSynonyms = it.titleSynonyms,
+            type = it.type,
+            source = it.source,
+            episodes = it.episodes ?: 0,
+            status = it.status,
+            airing = it.airing,
+            aired = it.aired?.string,
+            duration = it.duration,
+            rating = it.rating,
+            score = it.score ?: 0.0,
+            scoredBy = it.scoredBy,
+            rank = it.rank ?: 0,
             popularity = it.popularity,
             members = it.members,
             favorites = it.favorites,
@@ -267,9 +306,9 @@ fun JikanTopResponse.asDatabaseModel() : List<AnimeModel>{
             aired = it.aired?.string,
             duration = it.duration,
             rating = it.rating,
-            score = it.score,
+            score = it.score ?: 0.0,
             scoredBy = it.scoredBy,
-            rank = it.rank,
+            rank = it.rank ?: 0,
             popularity = it.popularity,
             members = it.members,
             favorites = it.favorites,
