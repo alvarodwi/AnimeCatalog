@@ -9,7 +9,7 @@
     <string name="text_favorites">Favorites</string>
     <string name="text_close">Close</string>
 
-    <string name="text_score">Score : %s</string>
+    <string name="text_score">Score : %s / 10</string>
     <string name="cover_image">Cover Image</string>
     <string name="add_fav">Add To Favorites</string>
     <string name="remove_fav">Remove From Favorites</string>
@@ -26,5 +26,10 @@
     <string name="text_no_score">No Score Yet</string>
     <string name="about_me_email">varoalvaro493@gmail.com</string>
     <string name="about_me_name">Alvaro Dwi Oktaviano</string>
+    <string name="no_internet">No internet</string>
+    <string name="list_by_season">List By Season</string>
+    <string name="group_by_types">Group By Types</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="now_airing">Now Airing</string>
 
 </resources>

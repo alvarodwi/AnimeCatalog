@@ -14,49 +14,57 @@
             type="com.pedo.animecatalog.domain.Anime" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:layout_marginBottom="@dimen/default_dimen"
-        android:onClick="@{() -> onClickListener.onClick(anime)}">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
 
-        <FrameLayout
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/img_cover"
-                android:layout_width="115dp"
-                android:layout_height="170dp"
-                android:layout_margin="5dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/cover_image"
-                app:coverImg="@{anime.imageUrl}"
-                tools:src="@tools:sample/backgrounds/scenic" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:onClick="@{() -> onClickListener.onClick(anime)}">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorAccent"
-                android:orientation="vertical">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tv_rank"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="#Rank"
-                    showRank="@{anime.rank}"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorIcons"
-                    android:layout_marginStart="@dimen/default_dimen"
-                    android:layout_marginEnd="@dimen/default_dimen"
-                    />
-            </LinearLayout>
-        </FrameLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/img_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="170dp"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cover_image"
+                    app:coverImg="@{anime.imageUrl}"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    app:cardBackgroundColor="@color/colorPrimary"
+                    app:cardCornerRadius="100dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/tv_rank"
+                        showRank="@{anime.rank}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/colorIcons"
+                        android:textStyle="bold"
+                        tools:text="#1" />
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
