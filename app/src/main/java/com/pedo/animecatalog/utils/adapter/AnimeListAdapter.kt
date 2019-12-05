@@ -27,11 +27,11 @@ class AnimeListAdapter(private val onClickListener: OnClickListener, private var
     ): BaseAnimeViewHolder<*> {
         return when(viewType){
             LIST_ITEM -> {
-                val binding = AnimeItemBinding.inflate(LayoutInflater.from(parent.context))
+                val binding = AnimeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 AnimeListViewHolder(binding)
             }
             GRID_ITEM -> {
-                val binding = AnimeGridItemBinding.inflate(LayoutInflater.from(parent.context))
+                val binding = AnimeGridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 AnimeGridViewHolder(binding)
             }
             else -> throw IllegalArgumentException("Invalid View Type")

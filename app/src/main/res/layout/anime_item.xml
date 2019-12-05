@@ -16,68 +16,86 @@
         <variable
             name="viewType"
             type="String" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:layout_marginBottom="@dimen/default_dimen"
-        android:padding="6dp"
-        android:onClick="@{() -> onClickListener.onClick(anime)}"
         android:background="?android:attr/selectableItemBackground"
-        >
+        android:onClick="@{() -> onClickListener.onClick(anime)}"
+        android:padding="6dp">
 
-        <RelativeLayout
-            android:id="@+id/img_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/img_cover"
+            android:layout_width="57dp"
+            android:layout_height="85dp"
+            android:layout_margin="6dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cover_image"
+            android:scaleType="centerCrop"
+            app:coverImg="@{anime.imageUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
-            <ImageView
-                android:id="@+id/img_cover"
-                android:layout_width="57dp"
-                android:layout_height="85dp"
-                android:layout_margin="5dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/cover_image"
-                app:coverImg="@{anime.imageUrl}"
-                tools:src="@tools:sample/backgrounds/scenic" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="2dp"
+            android:visibility="@{anime.rank == 0 ? View.GONE : View.VISIBLE}"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:cardCornerRadius="100dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_score">
 
             <TextView
                 android:id="@+id/tv_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="#Rank"
                 showRank="@{anime.rank}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                />
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SmallSp"
+                tools:text="#1" />
+        </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_toRightOf="@id/img_cover"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/default_dimen"
-                android:layout_marginTop="@dimen/default_dimen"
-                android:layout_marginEnd="@dimen/default_dimen"
-                android:text="@{anime.title}"
-                android:textStyle="bold"
-                tools:text="TITLE" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:maxWidth="250dp"
+            android:maxLines="2"
+            android:text="@{anime.title}"
+            android:textColor="#000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/img_cover"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="TITLE" />
 
-            <TextView
-                android:id="@+id/tv_score"
-                showScore="@{anime.score}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_title"
-                android:layout_toRightOf="@id/img_cover"
-                android:layout_alignParentEnd="false"
-                android:layout_marginStart="@dimen/default_dimen"
-                tools:text="SCORE" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_alignParentEnd="false"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:drawableStart="@drawable/ic_baseline_star_24_yellow"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@+id/img_cover"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:showScore="@{anime.score}"
+            tools:text="SCORE" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

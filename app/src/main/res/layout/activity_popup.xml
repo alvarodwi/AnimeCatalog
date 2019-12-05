@@ -26,9 +26,9 @@
 
         <Button
             android:id="@+id/btn_close_popup"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="start|center_vertical"
             android:drawablePadding="5dp"
             android:drawableStart="@android:drawable/ic_menu_close_clear_cancel"
             android:backgroundTint="@android:color/black"

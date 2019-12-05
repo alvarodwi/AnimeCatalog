@@ -21,7 +21,7 @@ class MainViewModel(app : Application) : AndroidViewModel(app){
         Timber.d(_viewMode.value)
     }
 
-    fun getLastViewModePreferences(){
+    private fun getLastViewModePreferences(){
         _viewMode.value = mSharedPreferences.getString(VIEW_MODE_KEY, TYPE_LIST)
         _oldViewMode.value = _viewMode.value
     }
@@ -33,7 +33,7 @@ class MainViewModel(app : Application) : AndroidViewModel(app){
     }
 
     fun hasViewModeChanged(valueToCompare : String?) : Boolean{
-        Timber.d("Has View Mod -> Old : ${valueToCompare} and New : ${_viewMode.value}")
+        Timber.d("Has View Mod -> Old : $valueToCompare and New : ${_viewMode.value}")
         return valueToCompare != _viewMode.value
     }
 

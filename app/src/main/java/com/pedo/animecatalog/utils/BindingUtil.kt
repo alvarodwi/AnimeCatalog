@@ -106,7 +106,7 @@ fun TextView.showScore(score : Double?){
 @BindingAdapter("showRank")
 fun TextView.showRank(rank : Int?){
     rank?.let{
-        text = if(it.equals(0)){
+        text = if(it == 0){
             ""
         }else{
             context.getString(R.string.text_rank,rank)

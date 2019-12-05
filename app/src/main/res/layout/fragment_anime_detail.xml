@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.pedo.animecatalog.ui.detail.AnimeDetailViewModel" />
@@ -18,25 +19,33 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <ImageView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/main_photo_image"
-                android:layout_width="0dp"
-                android:layout_height="266dp"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{viewModel.selectedMovie.imageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="266dp"
+                    android:contentDescription="@string/cover_image"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{viewModel.selectedMovie.imageUrl}"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:text="@{viewModel.selectedMovie.title}"
                 android:textColor="#de000000"
                 android:textSize="39sp"
-                android:text="@{viewModel.selectedMovie.title}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_photo_image"
                 tools:text="Kimi No Nawa" />
@@ -46,9 +55,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text="@{viewModel.displayScore+` / 10`}"
                 android:textColor="#de000000"
                 android:textSize="20sp"
-                android:text="@{viewModel.displayScore}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_text"
                 tools:text="8.32" />
@@ -57,10 +66,9 @@
                 android:id="@+id/btn_add_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/score_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:text="@string/text_favorites"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/score_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

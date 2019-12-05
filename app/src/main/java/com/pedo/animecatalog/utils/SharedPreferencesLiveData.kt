@@ -36,7 +36,7 @@ abstract class SharedPreferenceLiveData<T>(
     }
 }
 
-class SharedPreferenceStringLiveData(val prefs : SharedPreferences,key :String, defValue: String) : SharedPreferenceLiveData<String>(prefs,key,defValue){
+class SharedPreferenceStringLiveData(private val prefs : SharedPreferences, key :String, defValue: String) : SharedPreferenceLiveData<String>(prefs,key,defValue){
     override fun getValueFromPreferences(key: String, defValue: String): String {
         return prefs.getString(key,defValue)!!
     }
